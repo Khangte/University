@@ -117,25 +117,33 @@ int main()
 			digitalWrite(LED_B, LOW);
 			delay(500);
 		}
-		else if(luxRaw >= 200){
+		else if(luxRaw >= 200 && luxRaw < 300){
 			printf("Lux: %d(%7.3f) :: %x, %x\n", luxRaw, lux, buf[0], buf[1]);
 			printf("BLUE!\n");
 			digitalWrite(LED_R, LOW);
 			digitalWrite(LED_G, LOW);
 			digitalWrite(LED_B, HIGH);
 			delay(500);
-		}		
+		}	
+		else if(luxRaw >= 300) {
+			printf("Lux: %d(%7.3f) :: %x, %x\n", luxRaw, lux, buf[0], buf[1]);
+			printf("WHITE!\n");
+			digitalWrite(LED_R, HIGH);
+			digitalWrite(LED_G, HIGH);
+			digitalWrite(LED_B, HIGH);
+			delay(500);
+		}	
 		
-		if(luxRaw < 20) displayNum(0);
-		else if(luxRaw >= 20 && luxRaw < 40) displayNum(1);
-		else if(luxRaw >= 40 && luxRaw < 60) displayNum(2);
-		else if(luxRaw >= 60 && luxRaw < 80) displayNum(3);
-		else if(luxRaw >= 80 && luxRaw < 100) displayNum(4);
-		else if(luxRaw >= 100 && luxRaw < 120) displayNum(5);
-		else if(luxRaw >= 120 && luxRaw < 140) displayNum(6);
-		else if(luxRaw >= 140 && luxRaw < 160) displayNum(7);
-		else if(luxRaw >= 160 && luxRaw < 180) displayNum(8);
-		else if(luxRaw >= 180) displayNum(9);
+		if(luxRaw < 30) displayNum(0);
+		else if(luxRaw >= 30 && luxRaw < 60) displayNum(1);
+		else if(luxRaw >= 60 && luxRaw < 90) displayNum(2);
+		else if(luxRaw >= 90 && luxRaw < 120) displayNum(3);
+		else if(luxRaw >= 120 && luxRaw < 150) displayNum(4);
+		else if(luxRaw >= 150 && luxRaw < 180) displayNum(5);
+		else if(luxRaw >= 180 && luxRaw < 210) displayNum(6);
+		else if(luxRaw >= 210 && luxRaw < 240) displayNum(7);
+		else if(luxRaw >= 240 && luxRaw < 270) displayNum(8);
+		else if(luxRaw >= 270) displayNum(9);
 	}
 
     close(fd);
