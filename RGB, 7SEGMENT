@@ -48,18 +48,35 @@ void displayNum(int num)
 
 void oper_rgbLED(int luxRaw, float lux, char buf[])
 {
-	if(luxRaw < 30) displayNum(0);
-	else if(luxRaw >= 30 && luxRaw < 60) displayNum(1);
-	else if(luxRaw >= 60 && luxRaw < 90) displayNum(2);
-	else if(luxRaw >= 90 && luxRaw < 120) displayNum(3);
-	else if(luxRaw >= 120 && luxRaw < 150) displayNum(4);
-	else if(luxRaw >= 150 && luxRaw < 180) displayNum(5);
-	else if(luxRaw >= 180 && luxRaw < 210) displayNum(6);
-	else if(luxRaw >= 210 && luxRaw < 240) displayNum(7);
-	else if(luxRaw >= 240 && luxRaw < 270) displayNum(8);
-	else if(luxRaw >= 270) displayNum(9);
 	
-	if(luxRaw >= 0 && luxRaw <100){
+	if(luxRaw >= 0 && luxRaw < 100) displayNum(0);
+	else if(luxRaw >= 100 && luxRaw < 200) displayNum(1);
+	else if(luxRaw >= 200 && luxRaw < 300) displayNum(2);
+	else if(luxRaw >= 300 && luxRaw < 400) displayNum(3);
+	else if(luxRaw >= 400 && luxRaw < 500) displayNum(4);
+	else if(luxRaw >= 500 && luxRaw < 600) displayNum(5);
+	else if(luxRaw >= 600 && luxRaw < 700) displayNum(6);
+	else if(luxRaw >= 700 && luxRaw < 800) displayNum(7);
+	else if(luxRaw >= 800 && luxRaw < 900) displayNum(8);
+	else if(luxRaw >= 900) displayNum(9);
+	
+	if(luxRaw >= 0 && luxRaw < 100){
+		printf("Lux: %d(%7.3f) :: %x, %x\n", luxRaw, lux, buf[0], buf[1]);
+		printf("BLACK!\n");
+		digitalWrite(LED_R, LOW);
+		digitalWrite(LED_G, LOW);
+		digitalWrite(LED_B, LOW);
+		delay(500);
+	}
+	else if(luxRaw >= 100 && luxRaw < 200){
+		printf("Lux: %d(%7.3f) :: %x, %x\n", luxRaw, lux, buf[0], buf[1]);
+		printf("RED BLUE!\n");
+		digitalWrite(LED_R, HIGH);
+		digitalWrite(LED_G, LOW);
+		digitalWrite(LED_B, HIGH);
+		delay(500);
+	}
+	else if(luxRaw >= 200 && luxRaw < 300){
 		printf("Lux: %d(%7.3f) :: %x, %x\n", luxRaw, lux, buf[0], buf[1]);
 		printf("RED!\n");
 		digitalWrite(LED_R, HIGH);
@@ -67,7 +84,15 @@ void oper_rgbLED(int luxRaw, float lux, char buf[])
 		digitalWrite(LED_B, LOW);
 		delay(500);
 	}
-	else if(luxRaw >= 100 && luxRaw < 200){
+	else if(luxRaw >= 300 && luxRaw < 400){
+		printf("Lux: %d(%7.3f) :: %x, %x\n", luxRaw, lux, buf[0], buf[1]);
+		printf("RED GREEN!\n");
+		digitalWrite(LED_R, HIGH);
+		digitalWrite(LED_G, HIGH);
+		digitalWrite(LED_B, LOW);
+		delay(500);
+	}
+	else if(luxRaw >= 400 && luxRaw < 500){
 		printf("Lux: %d(%7.3f) :: %x, %x\n", luxRaw, lux, buf[0], buf[1]);
 		printf("GREEN!\n");
 		digitalWrite(LED_R, LOW);
@@ -75,7 +100,15 @@ void oper_rgbLED(int luxRaw, float lux, char buf[])
 		digitalWrite(LED_B, LOW);
 		delay(500);
 	}
-	else if(luxRaw >= 200 && luxRaw < 300){
+	else if(luxRaw >= 500 && luxRaw < 600){
+		printf("Lux: %d(%7.3f) :: %x, %x\n", luxRaw, lux, buf[0], buf[1]);
+		printf("GREEN BLUE!\n");
+		digitalWrite(LED_R, LOW);
+		digitalWrite(LED_G, HIGH);
+		digitalWrite(LED_B, HIGH);
+		delay(500);
+	}	
+	else if(luxRaw >= 600 && luxRaw < 700){
 		printf("Lux: %d(%7.3f) :: %x, %x\n", luxRaw, lux, buf[0], buf[1]);
 		printf("BLUE!\n");
 		digitalWrite(LED_R, LOW);
@@ -83,7 +116,7 @@ void oper_rgbLED(int luxRaw, float lux, char buf[])
 		digitalWrite(LED_B, HIGH);
 		delay(500);
 	}	
-	else if(luxRaw >= 300) {
+	else if(luxRaw >= 700) {
 		printf("Lux: %d(%7.3f) :: %x, %x\n", luxRaw, lux, buf[0], buf[1]);
 		printf("WHITE!\n");
 		digitalWrite(LED_R, HIGH);
