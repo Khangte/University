@@ -100,11 +100,6 @@ int main()
 	float lux;
     unsigned char buf[3] = {0};
     char key;
-    
-    for(int i=0; i<LED_NUM; i++){
-		gpioExport(gpPin[i]);
-		gpioDirection(gpPin[i], 1);
-	}
 
     if ((fd = open("/dev/i2c-1", O_RDWR)) < 0) { // Open the I2C device file
         perror("open");
@@ -116,6 +111,18 @@ int main()
         exit(1);
     }
 
+	if(wiringPiSetup() == -1){
+		printf("Err:wiringPiSetup!!\n");
+		return -1; }
+		
+	 for(int i=0; i<LED_NUM; i++){
+		gpioExport(gpPin[i]);
+		gpioDirection(gpPin[i], 1); }
+
+	pinMode(LED_R, OUTPUT);
+	pinMode(LED_G, OUTPUT);
+	pinMode(LED_B, OUTPUT);
+	
     // Send measurement request to the sensor
     //buf[0] = 0x01; // Power On
     //buf[0] = 0x07; // Reset
@@ -134,14 +141,6 @@ int main()
 		if (read(fd, buf, 2) != 2) {
 			perror("read");
 			exit(1); }
-
-		if(wiringPiSetup() == -1){
-			printf("Err:wiringPiSetup!!\n");
-			return -1; }
-
-		pinMode(LED_R, OUTPUT);
-		pinMode(LED_G, OUTPUT);
-		pinMode(LED_B, OUTPUT);
 	
 		// Convert the measurement value to lux
 		luxRaw = (buf[0] << 8) | buf[1];
