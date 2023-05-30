@@ -25,7 +25,7 @@ int main()
 	
 	for(i=0; i<LED_NUM; i++){
 		gpioExport(gpPin[i]);
-		gpioDirection(gpPin[i], 0); }
+		gpioDirection(gpPin[i], 1); }
 	for(i=0; i<LED_NUM; i++) gpioUnexport(gpPin[i]);
 	
 	if(wiringPiSetup() == -1){
