@@ -25,16 +25,16 @@ int gpPin[]= {26, 16, 20, 19, 13, 6, 5, 21};
 //			   A,  B,  C,  D,  E, F, G, DP	
 
 int digitNum[10][8] = {
-	{1, 1, 1, 1, 1, 1, 0, 0}, // 0
-	{0, 1, 1, 0, 0, 0, 0, 0}, // 1
-	{1, 1, 0, 1, 1, 0, 1, 0}, // 2
-	{1, 1, 1, 1, 0, 0, 1, 0}, // 3
-	{0, 1, 1, 0, 0, 1, 1, 0}, // 4
-	{1, 0, 1, 1, 0, 1, 1, 0}, // 5
-	{1, 0, 1, 1, 1, 1, 1, 0}, // 6
-	{1, 1, 1, 0, 0, 1, 0, 0}, // 7
-	{1, 1, 1, 1, 1, 1, 1, 0}, // 8
-	{1, 1, 1, 1, 0, 1, 1, 0}  // 9
+	{1, 1, 1, 1, 1, 1, 0, 0}, 	// 0
+	{0, 1, 1, 0, 0, 0, 0, 0}, 	// 1
+	{1, 1, 0, 1, 1, 0, 1, 0}, 	// 2
+	{1, 1, 1, 1, 0, 0, 1, 0}, 	// 3
+	{0, 1, 1, 0, 0, 1, 1, 0}, 	// 4
+	{1, 0, 1, 1, 0, 1, 1, 0}, 	// 5
+	{1, 0, 1, 1, 1, 1, 1, 0}, 	// 6
+	{1, 1, 1, 0, 0, 1, 0, 0}, 	// 7
+	{1, 1, 1, 1, 1, 1, 1, 0}, 	// 8
+	{1, 1, 1, 1, 0, 1, 1, 0}  	// 9
 };
 
 void displayNum(int num)
@@ -44,6 +44,53 @@ void displayNum(int num)
 		gpioWrite(gpPin[i], digitNum[num][i]);
 	}
 	usleep(100);
+}
+
+void oper_rgbLED(int luxRaw, float lux, char buf[])
+{
+	if(luxRaw < 30) displayNum(0);
+	else if(luxRaw >= 30 && luxRaw < 60) displayNum(1);
+	else if(luxRaw >= 60 && luxRaw < 90) displayNum(2);
+	else if(luxRaw >= 90 && luxRaw < 120) displayNum(3);
+	else if(luxRaw >= 120 && luxRaw < 150) displayNum(4);
+	else if(luxRaw >= 150 && luxRaw < 180) displayNum(5);
+	else if(luxRaw >= 180 && luxRaw < 210) displayNum(6);
+	else if(luxRaw >= 210 && luxRaw < 240) displayNum(7);
+	else if(luxRaw >= 240 && luxRaw < 270) displayNum(8);
+	else if(luxRaw >= 270) displayNum(9);
+	
+	if(luxRaw >= 0 && luxRaw <100){
+		printf("Lux: %d(%7.3f) :: %x, %x\n", luxRaw, lux, buf[0], buf[1]);
+		printf("RED!\n");
+		digitalWrite(LED_R, HIGH);
+		digitalWrite(LED_G, LOW);
+		digitalWrite(LED_B, LOW);
+		delay(500);
+	}
+	else if(luxRaw >= 100 && luxRaw < 200){
+		printf("Lux: %d(%7.3f) :: %x, %x\n", luxRaw, lux, buf[0], buf[1]);
+		printf("GREEN!\n");
+		digitalWrite(LED_R, LOW);
+		digitalWrite(LED_G, HIGH);
+		digitalWrite(LED_B, LOW);
+		delay(500);
+	}
+	else if(luxRaw >= 200 && luxRaw < 300){
+		printf("Lux: %d(%7.3f) :: %x, %x\n", luxRaw, lux, buf[0], buf[1]);
+		printf("BLUE!\n");
+		digitalWrite(LED_R, LOW);
+		digitalWrite(LED_G, LOW);
+		digitalWrite(LED_B, HIGH);
+		delay(500);
+	}	
+	else if(luxRaw >= 300) {
+		printf("Lux: %d(%7.3f) :: %x, %x\n", luxRaw, lux, buf[0], buf[1]);
+		printf("WHITE!\n");
+		digitalWrite(LED_R, HIGH);
+		digitalWrite(LED_G, HIGH);
+		digitalWrite(LED_B, HIGH);
+		delay(500);
+	}	
 }
 
 int main()
@@ -78,8 +125,7 @@ int main()
 
 		if (write(fd, buf, 1) != 1) {
 			perror("write");
-			exit(1);
-		}
+			exit(1); }
     
 		// Wait for measurement to be ready (typically takes 120ms)
 		usleep(120000);
@@ -101,49 +147,7 @@ int main()
 		luxRaw = (buf[0] << 8) | buf[1];
 		lux = (float)luxRaw / 1.2; // Divide by 1.2 to get the actual lux value
 		
-		if(luxRaw >= 0 && luxRaw <100){
-			printf("Lux: %d(%7.3f) :: %x, %x\n", luxRaw, lux, buf[0], buf[1]);
-			printf("RED!\n");
-			digitalWrite(LED_R, HIGH);
-			digitalWrite(LED_G, LOW);
-			digitalWrite(LED_B, LOW);
-			delay(500);
-		}
-		else if(luxRaw >= 100 && luxRaw < 200){
-			printf("Lux: %d(%7.3f) :: %x, %x\n", luxRaw, lux, buf[0], buf[1]);
-			printf("GREEN!\n");
-			digitalWrite(LED_R, LOW);
-			digitalWrite(LED_G, HIGH);
-			digitalWrite(LED_B, LOW);
-			delay(500);
-		}
-		else if(luxRaw >= 200 && luxRaw < 300){
-			printf("Lux: %d(%7.3f) :: %x, %x\n", luxRaw, lux, buf[0], buf[1]);
-			printf("BLUE!\n");
-			digitalWrite(LED_R, LOW);
-			digitalWrite(LED_G, LOW);
-			digitalWrite(LED_B, HIGH);
-			delay(500);
-		}	
-		else if(luxRaw >= 300) {
-			printf("Lux: %d(%7.3f) :: %x, %x\n", luxRaw, lux, buf[0], buf[1]);
-			printf("WHITE!\n");
-			digitalWrite(LED_R, HIGH);
-			digitalWrite(LED_G, HIGH);
-			digitalWrite(LED_B, HIGH);
-			delay(500);
-		}	
-		
-		if(luxRaw < 30) displayNum(0);
-		else if(luxRaw >= 30 && luxRaw < 60) displayNum(1);
-		else if(luxRaw >= 60 && luxRaw < 90) displayNum(2);
-		else if(luxRaw >= 90 && luxRaw < 120) displayNum(3);
-		else if(luxRaw >= 120 && luxRaw < 150) displayNum(4);
-		else if(luxRaw >= 150 && luxRaw < 180) displayNum(5);
-		else if(luxRaw >= 180 && luxRaw < 210) displayNum(6);
-		else if(luxRaw >= 210 && luxRaw < 240) displayNum(7);
-		else if(luxRaw >= 240 && luxRaw < 270) displayNum(8);
-		else if(luxRaw >= 270) displayNum(9);
+		oper_rgbLED(luxRaw, lux, buf);
 	}
 
     close(fd);
